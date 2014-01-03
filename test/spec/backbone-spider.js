@@ -29,5 +29,16 @@
         expect(this.view.originalMethod.calledOnce).to.be.true;
       });
     });
+    describe('restoreAllFunc()', function(){
+      beforeEach(function(){
+        this.view.spyAllFunc();
+      });
+      it('should restore sinon wrapper', function(){
+        this.view.render();
+        expect(this.view.render.hasOwnProperty('called')).to.be.true;
+        this.view.restoreAllFunc();
+        expect(this.view.render.hasOwnProperty('called')).to.be.false;
+      });
+    });
   });
 })();
