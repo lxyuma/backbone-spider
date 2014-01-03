@@ -5,4 +5,9 @@
 
 (function(Backbone) {
 
+  _.extend(Backbone.View.prototype, {
+    spyAllFunc: function() {
+    }
+  });
+
 }).call(this, Backbone, sinon);

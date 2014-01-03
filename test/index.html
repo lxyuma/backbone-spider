@@ -1,37 +1,28 @@
 <!doctype html>
-<html>
 <head>
-  <meta charset='utf8'>
-  <title>Backbone Test Suite</title>
-  <link rel="stylesheet" href="../vendor/backbone/test/vendor/qunit.css" type="text/css" media="screen">
-  <script src="../vendor/backbone/test/vendor/json2.js"></script>
-  <script src="../vendor/backbone/test/vendor/jquery.js"></script>
-  <script src="../vendor/backbone/test/vendor/qunit.js"></script>
-  <script src="../vendor/backbone/test/vendor/underscore.js"></script>
-  <script src="../vendor/backbone/backbone.js"></script>
-  <script src="../backbone-spider.js"></script>
-
-  <script src="../vendor/backbone/test/environment.js"></script>
-  <script src="../vendor/backbone/test/noconflict.js"></script>
-  <script src="../vendor/backbone/test/events.js"></script>
-  <script src="../vendor/backbone/test/model.js"></script>
-  <script src="../vendor/backbone/test/collection.js"></script>
-  <script src="../vendor/backbone/test/router.js"></script>
-  <script src="../vendor/backbone/test/view.js"></script>
-  <script src="../vendor/backbone/test/sync.js"></script>
-
-  <script src="spider.js"></script>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Mocha Spec Runner</title>
+    <link rel="stylesheet" href="lib/mocha/mocha.css">
 </head>
 <body>
-  <div id="qunit"></div>
-  <div id="qunit-fixture">
-    <div id='testElement'>
-      <h1>Test</h1>
-    </div>
-  </div>
-  <br>
-  <br>
-  <h1 id="qunit-header"><a href="#">Backbone Speed Suite</a></h1>
-  <div id="jslitmus_container" style="margin: 20px 10px;"></div>
+    <div id="mocha"></div>
+    <script src="lib/mocha/mocha.js"></script>
+    <script>mocha.setup('bdd')</script>
+    <!-- assertion framework -->
+    <script src="lib/chai.js"></script>
+    <script>var expect = chai.expect</script>
+    <script src="../bower_components/sinon/pkg/sinon.js"></script>
+
+    <!-- include source files here... -->
+    <script src="../bower_components/jquery/jquery.js"></script>
+    <script src="../bower_components/underscore/underscore.js"></script>
+    <script src="../bower_components/backbone/backbone.js"></script>
+    <script src="../backbone-spider.js"></script>
+
+    <!-- include spec files here... -->
+    <script src="spec/backbone-spider.js"></script>
+
+    <script>mocha.run()</script>
 </body>
 </html>
