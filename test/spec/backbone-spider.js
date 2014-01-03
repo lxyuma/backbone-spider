@@ -28,6 +28,12 @@
         this.view.originalMethod();
         expect(this.view.originalMethod.calledOnce).to.be.true;
       });
+      it('should not affect to sinon.stub', function(){
+        this.view.render.restore();
+        sinon.stub(this.view, "render").returns('fakedTrue');
+        expect(this.view.render()).to.eql('fakedTrue');
+        this.view.render.restore();
+      });
     });
     describe('restoreAllFunc()', function(){
       beforeEach(function(){

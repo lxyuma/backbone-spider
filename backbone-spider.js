@@ -15,7 +15,9 @@
     },
     restoreAllFunc: function() {
       _.map(this.allFunc, function(prop){
-        this[prop].restore();
+        if (this._isSpy(this[prop])){
+          this[prop].restore();
+        };
       }, this);
     },
     _getAllFunc: function(){
@@ -26,6 +28,9 @@
         };
       };
       return allFunc;
+    },
+    _isSpy: function(func){
+      return func.hasOwnProperty('called');
     }
 
 
