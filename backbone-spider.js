@@ -32,21 +32,5 @@
     _isSpy: function(func){
       return func.hasOwnProperty('called');
     }
-
-
-    // namespace
-    //spider: {
-    //  _setFuncOnce: function(){
-    //    if(typeof this.allProp !== "object") {
-    //      for (var prop in this){
-    //        this.allProp.push(prop);
-    //        if (this.hasOwnProperty(prop)){
-    //          this.originalFunc.push(prop);
-    //        }
-    //      };
-    //    };
-    //  };
-    //}
   });
-
 }).call(this, Backbone, sinon);
