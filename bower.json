@@ -1,0 +1,22 @@
+{
+  "name": "backbone-spider",
+  "main": "backbone-spider.js",
+  "version": "0.0.0",
+  "authors": [
+    "ryuma.tsukano <lyumalyuma@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "backbone": "~1.1.0",
+    "underscore": "~1.5.2",
+    "jquery": "~2.0.3",
+    "sinon": "~1.7.3"
+  }
+}
