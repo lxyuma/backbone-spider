@@ -51,33 +51,43 @@
                 expect(this.view.render.hasOwnProperty('called')).to.be.false;
             });
         });
-        describe('spyAllEvent()', function(){
-
-        });
-        describe('restoreAllEvent()', function(){
-
-        });
-        describe('haveCalledEvent()', function(){
-            it('should call event'); // , function(){
-            //    expect(this.view.model.eventSpy('sync').calledOnce).to.be(true);
-            //});
-        });
-        describe('_getAllEvents()', function(){
+        describe('EVENT SPY', function(){
             beforeEach(function(){
                 this.view.model = new MyModel();
-                this.view.collection = new MyCollection();
-
                 this.view.listenTo(this.view.model, 'sync', function(){ });
-                this.view.listenTo(this.view.collection, 'changed', function(){ });
+                this.view.listenTo(this.view.model, 'change', function(){ });
 
+                this.view.collection = new MyCollection();
+                this.view.listenTo(this.view.collection, 'reset', function(){});
             });
-            it('should get all events', function(){
-                var allEvents = this.view._getAllEvents();
-
-                _.each(allEvents, function(targetEvents){
-                    console.log(targetEvents.target);
-                    console.log(targetEvents.events);
+            describe('spyAllEvents()', function(){
+                it('should spy all model / collection events', function(){
+                    this.view.spyAllEvents();
+                    expect(this.view.spider.spyEvents.model['sync'].hasOwnProperty('called')).to.be.true;
+                    expect(this.view.spider.spyEvents.model['change'].hasOwnProperty('called')).to.be.true;
+                    expect(this.view.spider.spyEvents.collection['reset'].hasOwnProperty('called')).to.be.true;
+                    this.view.collection.reset([]);
+                    expect(this.view.spider.spyEvents.collection['reset'].calledOnce).to.be.true;
                 });
+            });
+            describe('restoreAllEvent()', function(){
+                it('should restore all events');
+            });
+            describe('haveCalledEvent()', function(){
+                //it('should call event', function(){
+                //    this.view.spyAllEvents();
+                //    this.view.collection.reset([]);
+                //    expect(this.view.collection.eventSpy('sync').calledOnce).to.be(true);
+                //});
+            });
+            describe('createEventsSpy()', function(){
+                it('should spy', function(){
+                    var eventsSpy = this.view.createEventsSpy(this.view.model);
+
+                    expect(eventsSpy['sync'].hasOwnProperty('called')).to.be.true;
+                    expect(eventsSpy['change'].hasOwnProperty('called')).to.be.true;
+                });
+
             });
         });
     });

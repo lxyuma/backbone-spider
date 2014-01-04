@@ -6,15 +6,23 @@
 (function(Backbone) {
 
     _.extend(Backbone.View.prototype, {
-
+        // instance variables
+        spider: {
+            allFunc: [],
+            spyEvents: {
+                model : [],
+                collection: []
+            }
+        },
+        // spy function
         spyAllFunc: function() {
-            this.allFunc = this._getAllFunc();
-            _.map(this.allFunc, function(prop){
+            this.spider.allFunc = this._getAllFunc();
+            _.map(this.spider.allFunc, function(prop){
                 sinon.spy(this, prop);
             }, this);
         },
         restoreAllFunc: function() {
-            _.map(this.allFunc, function(prop){
+            _.map(this.spider.allFunc, function(prop){
                 if (this._isSpy(this[prop])){
                     this[prop].restore();
                 };
@@ -32,21 +40,19 @@
         _isSpy: function(func){
             return func.hasOwnProperty('called');
         },
-
-        spyAllEvent: function(){
-            this.allEvent = this._getAllEvents();
+        // spy events
+        spyAllEvents: function(){
+            this.spider.spyEvents.model = this.createEventsSpy(this.model);
+            this.spider.spyEvents.collection = this.createEventsSpy(this.collection);
         },
-        _getAllEvents: function(){
-            var targetEvents = [];
-            for( var listenId in this._listeningTo) {
-                var target = this._listeningTo[listenId];
-                var events = [];
-                for( var event in target._events) {
-                    events.push(event);
-                };
-                targetEvents.push({target: target, events: events});
-            };
-            return targetEvents;
-        }
+        createEventsSpy: function(target){
+            var eventsSpy = {};
+            _.each(_.keys(target._events), function(eventName){
+                var spy = sinon.spy();
+                target.on(eventName, spy);
+                eventsSpy[eventName] = spy;
+            });
+            return eventsSpy;
+        },
     });
 }).call(this, Backbone, sinon);
