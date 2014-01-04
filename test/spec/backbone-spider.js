@@ -1,17 +1,20 @@
 /*global describe, it */
 'use strict';
 (function () {
+    var MyView, MyModel, MyCollection;
     describe('Backbone Spider', function () {
         before(function(){
-            this.MyView = Backbone.View.extend({
+            MyView = Backbone.View.extend({
                 url: "faked",
                 originalMethod: function(){
                     console.log('have called original method in test');
                 }
             });
+            MyModel = Backbone.Model.extend({});
+            MyCollection = Backbone.Collection.extend({});
         });
         beforeEach(function(){
-            this.view = new this.MyView();
+            this.view = new MyView();
         });
         describe('spyAllFunc()', function () {
             describe('basic usage', function(){
@@ -46,6 +49,35 @@
                 expect(this.view.render.hasOwnProperty('called')).to.be.true;
                 this.view.restoreAllFunc();
                 expect(this.view.render.hasOwnProperty('called')).to.be.false;
+            });
+        });
+        describe('spyAllEvent()', function(){
+
+        });
+        describe('restoreAllEvent()', function(){
+
+        });
+        describe('haveCalledEvent()', function(){
+            it('should call event'); // , function(){
+            //    expect(this.view.model.eventSpy('sync').calledOnce).to.be(true);
+            //});
+        });
+        describe('_getAllEvents()', function(){
+            beforeEach(function(){
+                this.view.model = new MyModel();
+                this.view.collection = new MyCollection();
+
+                this.view.listenTo(this.view.model, 'sync', function(){ });
+                this.view.listenTo(this.view.collection, 'changed', function(){ });
+
+            });
+            it('should get all events', function(){
+                var allEvents = this.view._getAllEvents();
+
+                _.each(allEvents, function(targetEvents){
+                    console.log(targetEvents.target);
+                    console.log(targetEvents.events);
+                });
             });
         });
     });

@@ -31,6 +31,22 @@
         },
         _isSpy: function(func){
             return func.hasOwnProperty('called');
+        },
+
+        spyAllEvent: function(){
+            this.allEvent = this._getAllEvents();
+        },
+        _getAllEvents: function(){
+            var targetEvents = [];
+            for( var listenId in this._listeningTo) {
+                var target = this._listeningTo[listenId];
+                var events = [];
+                for( var event in target._events) {
+                    events.push(event);
+                };
+                targetEvents.push({target: target, events: events});
+            };
+            return targetEvents;
         }
     });
 }).call(this, Backbone, sinon);
