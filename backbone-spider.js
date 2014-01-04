@@ -45,6 +45,13 @@
             this.spider.spyEvents.model = this.createEventsSpy(this.model);
             this.spider.spyEvents.collection = this.createEventsSpy(this.collection);
         },
+        restoreAllEvents: function(){
+            // Todo: fully delete these events.
+            _.each(this.spider.spyEvents.model     , function(spy, eventName) { this.model.off(eventName, spy)}, this);
+            this.spider.spyEvents.model = {};
+            _.each(this.spider.spyEvents.collection, function(spy, eventName) { this.collection.off(eventName, spy)}, this);
+            this.spider.spyEvents.collection = {};
+        },
         createEventsSpy: function(target){
             var eventsSpy = {};
             _.each(_.keys(target._events), function(eventName){

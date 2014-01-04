@@ -70,15 +70,15 @@
                     expect(this.view.spider.spyEvents.collection['reset'].calledOnce).to.be.true;
                 });
             });
-            describe('restoreAllEvent()', function(){
-                it('should restore all events');
-            });
-            describe('haveCalledEvent()', function(){
-                //it('should call event', function(){
-                //    this.view.spyAllEvents();
-                //    this.view.collection.reset([]);
-                //    expect(this.view.collection.eventSpy('sync').calledOnce).to.be(true);
-                //});
+            describe('restoreAllEvents()', function(){
+                it('should restore all events', function(){
+                    this.view.spyAllEvents();
+                    expect(this.view.spider.spyEvents.model['sync'].hasOwnProperty('called')).to.be.true;
+
+                    this.view.restoreAllEvents();
+                    expect(this.view.spider.spyEvents.model['sync']).to.be.undefined;
+                    console.log(this.view.model._events);
+                });
             });
             describe('createEventsSpy()', function(){
                 it('should spy', function(){
