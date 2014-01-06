@@ -15,16 +15,31 @@
         });
         beforeEach(function(){
             this.view = new MyView();
+            this.isSinonWrapped = this.view._isSinonWrapped;
         });
         describe('spyAll()', function(){
             beforeEach(function(){
-                sinon.stub(this.view, 'spyAllFunc');
-                sinon.stub(this.view, 'spyAllEvents');
+                sinon.spy(this.view, 'spyAllFunc');
+                sinon.spy(this.view, 'spyAllEvents');
             });
             it('should spy all function and events', function(){
                 this.view.spyAll();
                 expect(this.view.spyAllFunc.called).to.be.true;
                 expect(this.view.spyAllEvents.called).to.be.true;
+            });
+        });
+        describe('restoreAll()', function() {
+            beforeEach(function(){
+                sinon.spy(this.view, 'restoreAllFunc');
+                sinon.spy(this.view, 'restoreAllEvents');
+            });
+            it('should spy all function and events', function(){
+                this.view.spyAll();
+                expect(this.isSinonWrapped(this.view.spyAllFunc)).to.be.true;
+                expect(this.isSinonWrapped(this.view.spyAllEvents)).to.be.true;
+                this.view.restoreAll();
+                expect(this.isSinonWrapped(this.view.spyAllFunc)).to.be.false;
+                expect(this.isSinonWrapped(this.view.spyAllEvents)).to.be.false;
             });
         });
         describe('spyAllFunc()', function () {
@@ -57,9 +72,9 @@
             });
             it('should restore sinon wrapper', function(){
                 this.view.render();
-                expect(this.view.render.hasOwnProperty('called')).to.be.true;
+                expect(this.isSinonWrapped(this.view.render)).to.be.true;
                 this.view.restoreAllFunc();
-                expect(this.view.render.hasOwnProperty('called')).to.be.false;
+                expect(this.isSinonWrapped(this.view.render)).to.be.false;
             });
         });
         describe('EVENT SPY', function(){
@@ -74,9 +89,9 @@
             describe('spyAllEvents()', function(){
                 it('should spy all model / collection events', function(){
                     this.view.spyAllEvents();
-                    expect(this.view.spider.spyEvents.model['sync'].hasOwnProperty('called')).to.be.true;
-                    expect(this.view.spider.spyEvents.model['change'].hasOwnProperty('called')).to.be.true;
-                    expect(this.view.spider.spyEvents.collection['reset'].hasOwnProperty('called')).to.be.true;
+                    expect(this.isSinonWrapped(this.view.spider.spyEvents.model['sync'])).to.be.true;
+                    expect(this.isSinonWrapped(this.view.spider.spyEvents.model['change'])).to.be.true;
+                    expect(this.isSinonWrapped(this.view.spider.spyEvents.collection['reset'])).to.be.true;
                     this.view.collection.reset([]);
                     expect(this.view.spider.spyEvents.collection['reset'].calledOnce).to.be.true;
                 });
@@ -93,7 +108,7 @@
             describe('restoreAllEvents()', function(){
                 it('should restore all events', function(){
                     this.view.spyAllEvents();
-                    expect(this.view.spider.spyEvents.model['sync'].hasOwnProperty('called')).to.be.true;
+                    expect(this.isSinonWrapped(this.view.spider.spyEvents.model['sync'])).to.be.true;
 
                     this.view.restoreAllEvents();
                     expect(this.view.spider.spyEvents.model['sync']).to.be.undefined;
@@ -104,8 +119,8 @@
                 it('should spy', function(){
                     var eventsSpy = this.view.createEventsSpy(this.view.model);
 
-                    expect(eventsSpy['sync'].hasOwnProperty('called')).to.be.true;
-                    expect(eventsSpy['change'].hasOwnProperty('called')).to.be.true;
+                    expect(this.isSinonWrapped(eventsSpy['sync'])).to.be.true;
+                    expect(this.isSinonWrapped(eventsSpy['change'])).to.be.true;
                 });
 
             });

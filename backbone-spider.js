@@ -14,13 +14,18 @@
                 collection: []
             }
         },
+        // SPY ALL
         spyAll: function() {
             this.spyAllFunc();
             this.spyAllEvents();
         },
-        // spy function
+        restoreAll: function(){
+            this.restoreAllFunc();
+            this.restoreAllEvents();
+        },
+        // SPY FUNCTION
         spyAllFunc: function() {
-            this.spider.spyFunctions = _.reduce(_.functions(this), function(spyArray, prop){
+            return this.spider.spyFunctions = _.reduce(_.functions(this), function(spyArray, prop){
                 if (! this._isSinonWrapped(this[prop])){
                     spyArray.push(sinon.spy(this, prop));
                 };
@@ -28,16 +33,17 @@
             }, [], this);
         },
         restoreAllFunc: function() {
-            _.map(this.spider.spyFunctions, function(prop){
+            return _.map(this.spider.spyFunctions, function(prop){
                 if (this._isSinonWrapped(prop)){
                     prop.restore();
                 };
             }, this);
         },
         _isSinonWrapped: function(func){
-            return func.restore && func.restore.sinon;
+            // this is the same checking in sinon.js
+            return ((func.restore && func.restore.sinon) || func.calledBefore) ? true : false;
         },
-        // spy events
+        // SPY EVENTS
         spyAllEvents: function(){
             this.spider.spyEvents.model = this.createEventsSpy(this.model);
             this.spider.spyEvents.collection = this.createEventsSpy(this.collection);
