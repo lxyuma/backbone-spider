@@ -8,7 +8,7 @@
     _.extend(Backbone.View.prototype, {
         // instance variables
         spider: {
-            allFunc: [],
+            spyFunctions: [],
             spyEvents: {
                 model : [],
                 collection: []
@@ -20,8 +20,7 @@
         },
         // spy function
         spyAllFunc: function() {
-            var allFunc = this._getAllFunc();
-            this.spider.allFunc = _.reduce(allFunc, function(spyArray, prop){
+            this.spider.spyFunctions = _.reduce(_.functions(this), function(spyArray, prop){
                 if (! this._isSinonWrapped(this[prop])){
                     spyArray.push(sinon.spy(this, prop));
                 };
@@ -29,20 +28,11 @@
             }, [], this);
         },
         restoreAllFunc: function() {
-            _.map(this.spider.allFunc, function(prop){
+            _.map(this.spider.spyFunctions, function(prop){
                 if (this._isSinonWrapped(prop)){
                     prop.restore();
                 };
             }, this);
-        },
-        _getAllFunc: function(){
-            var allFunc = [];
-            for (var prop in this){
-                if (typeof this[prop] === "function") {
-                    allFunc.push(prop);
-                };
-            };
-            return allFunc;
         },
         _isSinonWrapped: function(func){
             return func.restore && func.restore.sinon;
