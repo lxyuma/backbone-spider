@@ -14,17 +14,24 @@
                 collection: []
             }
         },
+        spyAll: function() {
+            this.spyAllFunc();
+            this.spyAllEvents();
+        },
         // spy function
         spyAllFunc: function() {
-            this.spider.allFunc = this._getAllFunc();
-            _.map(this.spider.allFunc, function(prop){
-                sinon.spy(this, prop);
-            }, this);
+            var allFunc = this._getAllFunc();
+            this.spider.allFunc = _.reduce(allFunc, function(spyArray, prop){
+                if (! this._isSinonWrapped(this[prop])){
+                    spyArray.push(sinon.spy(this, prop));
+                };
+                return spyArray;
+            }, [], this);
         },
         restoreAllFunc: function() {
             _.map(this.spider.allFunc, function(prop){
-                if (this._isSpy(this[prop])){
-                    this[prop].restore();
+                if (this._isSinonWrapped(prop)){
+                    prop.restore();
                 };
             }, this);
         },
@@ -37,8 +44,8 @@
             };
             return allFunc;
         },
-        _isSpy: function(func){
-            return func.hasOwnProperty('called');
+        _isSinonWrapped: function(func){
+            return func.restore && func.restore.sinon;
         },
         // spy events
         spyAllEvents: function(){
@@ -54,11 +61,13 @@
         },
         createEventsSpy: function(target){
             var eventsSpy = {};
-            _.each(_.keys(target._events), function(eventName){
-                var spy = sinon.spy();
-                target.on(eventName, spy);
-                eventsSpy[eventName] = spy;
-            });
+            if (target && target._events) {
+                _.each(_.keys(target._events), function(eventName){
+                    var spy = sinon.spy();
+                    target.on(eventName, spy);
+                    eventsSpy[eventName] = spy;
+                });
+            };
             return eventsSpy;
         },
     });

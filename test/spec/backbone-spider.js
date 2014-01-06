@@ -16,6 +16,17 @@
         beforeEach(function(){
             this.view = new MyView();
         });
+        describe('spyAll()', function(){
+            beforeEach(function(){
+                sinon.stub(this.view, 'spyAllFunc');
+                sinon.stub(this.view, 'spyAllEvents');
+            });
+            it('should spy all function and events', function(){
+                this.view.spyAll();
+                expect(this.view.spyAllFunc.called).to.be.true;
+                expect(this.view.spyAllEvents.called).to.be.true;
+            });
+        });
         describe('spyAllFunc()', function () {
             describe('basic usage', function(){
                 beforeEach(function(){
