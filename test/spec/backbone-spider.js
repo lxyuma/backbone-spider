@@ -115,9 +115,9 @@
                     console.log(this.view.model._events);
                 });
             });
-            describe('createEventsSpy()', function(){
+            describe('_createEventsSpy()', function(){
                 it('should spy', function(){
-                    var eventsSpy = this.view.createEventsSpy(this.view.model);
+                    var eventsSpy = this.view._createEventsSpy(this.view.model);
 
                     expect(this.isSinonWrapped(eventsSpy['sync'])).to.be.true;
                     expect(this.isSinonWrapped(eventsSpy['change'])).to.be.true;

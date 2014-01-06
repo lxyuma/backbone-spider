@@ -45,26 +45,27 @@
         },
         // SPY EVENTS
         spyAllEvents: function(){
-            this.spider.spyEvents.model = this.createEventsSpy(this.model);
-            this.spider.spyEvents.collection = this.createEventsSpy(this.collection);
+            this.spider.spyEvents.model = this._createEventsSpy(this.model);
+            this.spider.spyEvents.collection = this._createEventsSpy(this.collection);
         },
         restoreAllEvents: function(){
-            // Todo: fully delete these events.
+            // Todo: fully delete these events.(now, it's not completed)
             _.each(this.spider.spyEvents.model     , function(spy, eventName) { this.model.off(eventName, spy)}, this);
             this.spider.spyEvents.model = {};
             _.each(this.spider.spyEvents.collection, function(spy, eventName) { this.collection.off(eventName, spy)}, this);
             this.spider.spyEvents.collection = {};
         },
-        createEventsSpy: function(target){
-            var eventsSpy = {};
+        _createEventsSpy: function(target){
             if (target && target._events) {
-                _.each(_.keys(target._events), function(eventName){
+                return _.reduce(_.keys(target._events), function(eventObj, eventName){
                     var spy = sinon.spy();
                     target.on(eventName, spy);
-                    eventsSpy[eventName] = spy;
-                });
+                    eventObj[eventName] = spy;
+                    return eventObj;
+                }, {});
+            } else {
+                return [];
             };
-            return eventsSpy;
         },
     });
 }).call(this, Backbone, sinon);
