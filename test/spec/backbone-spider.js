@@ -80,6 +80,15 @@
                     this.view.collection.reset([]);
                     expect(this.view.spider.spyEvents.collection['reset'].calledOnce).to.be.true;
                 });
+                describe('when view has no model and collection', function(){
+                    beforeEach(function(){
+                        this.noResourceView = new MyView();
+                    });
+                    it('should not create spyEvents', function(){
+                        this.noResourceView.spyAllEvents();
+                        expect(this.noResourceView.spider.spyEvents.model).to.eql([]);
+                    });
+                });
             });
             describe('restoreAllEvents()', function(){
                 it('should restore all events', function(){
