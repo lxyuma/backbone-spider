@@ -15,6 +15,9 @@ So, you can spy all functions and all events.
 ```javascript
 // Your Backbone View
 var YourView = Backbone.View.extend({
+    initialize: function(){
+        this.listenTo(this.model, 'sync', function(){ console.log('saved!!'); });
+    },
     originalFunc: function(){
         // any sentence ...
         this.commonMethod();
@@ -23,7 +26,7 @@ var YourView = Backbone.View.extend({
 });
 var YourModel = Backbone.Model.extend({});
 
-// mocha
+// mocha + chai
 beforeEach(function(){
     this.view = new YourView({
         model: new YourModel({name: "test"})
@@ -43,7 +46,7 @@ it('should spy all your original View', function(){
 });
 it('should spy all events', function(){
     this.view.model.save();
-    expect(this.view.save.called).to.be.true;
+    expect(this.view.spider.model["sync"].called).to.be.true;
 });
 ```
 
@@ -61,7 +64,11 @@ So, I make it experimentally.
 
 I want to add function for decreasing rebundant test double expression.
 
+- validate method for spider.model/collection
 - model/collection methods wrapping
+- for stubbing interface to methods wrapped by this plugin
+- observe listenTo(when add events, add eventsSpy)
+- observe all built in events(include not initialized)
 - server fake
 - restore eventspy(now, it's no completed)
 
