@@ -94,7 +94,7 @@
                     expect(this.isSinonWrapped(this.view.spyModel('change'))).to.be.true;
                     expect(this.isSinonWrapped(this.view.spyCollection('reset'))).to.be.true;
                     this.view.collection.reset([]);
-                    expect(this.view._spider.spyEvents.collection['reset'].calledOnce).to.be.true;
+                    expect(this.view.spyCollection('reset').calledOnce).to.be.true;
                 });
                 describe('when view has no model and collection', function(){
                     beforeEach(function(){
