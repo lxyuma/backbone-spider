@@ -7,7 +7,7 @@
 
     _.extend(Backbone.View.prototype, {
         // instance variables
-        spider: {
+        _spider: {
             spyFunctions: [],
             spyEvents: {
                 model : [],
@@ -25,7 +25,7 @@
         },
         // SPY FUNCTION
         spyAllFunc: function() {
-            return this.spider.spyFunctions = _.reduce(_.functions(this), function(spyArray, prop){
+            return this._spider.spyFunctions = _.reduce(_.functions(this), function(spyArray, prop){
                 if (! this._isSinonWrapped(this[prop])){
                     spyArray.push(sinon.spy(this, prop));
                 };
@@ -33,7 +33,7 @@
             }, [], this);
         },
         restoreAllFunc: function() {
-            return _.map(this.spider.spyFunctions, function(prop){
+            return _.map(this._spider.spyFunctions, function(prop){
                 if (this._isSinonWrapped(prop)){
                     prop.restore();
                 };
@@ -45,15 +45,15 @@
         },
         // SPY EVENTS
         spyAllEvents: function(){
-            this.spider.spyEvents.model = this._createEventsSpy(this.model);
-            this.spider.spyEvents.collection = this._createEventsSpy(this.collection);
+            this._spider.spyEvents.model = this._createEventsSpy(this.model);
+            this._spider.spyEvents.collection = this._createEventsSpy(this.collection);
         },
         restoreAllEvents: function(){
             // Todo: fully delete these events.(now, it's not completed)
-            _.each(this.spider.spyEvents.model     , function(spy, eventName) { this.model.off(eventName, spy)}, this);
-            this.spider.spyEvents.model = {};
-            _.each(this.spider.spyEvents.collection, function(spy, eventName) { this.collection.off(eventName, spy)}, this);
-            this.spider.spyEvents.collection = {};
+            _.each(this._spider.spyEvents.model     , function(spy, eventName) { this.model.off(eventName, spy)}, this);
+            this._spider.spyEvents.model = {};
+            _.each(this._spider.spyEvents.collection, function(spy, eventName) { this.collection.off(eventName, spy)}, this);
+            this._spider.spyEvents.collection = {};
         },
         _createEventsSpy: function(target){
             if (target && target._events) {
@@ -69,10 +69,10 @@
         },
         // SPY getter
         spyModel: function(eventName){
-            return this.spider.spyEvents.model[eventName];
+            return this._spider.spyEvents.model[eventName];
         },
         spyCollection: function(eventName){
-            return this.spider.spyEvents.collection[eventName];
+            return this._spider.spyEvents.collection[eventName];
         }
     });
 }).call(this, Backbone, sinon);

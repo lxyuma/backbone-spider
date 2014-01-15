@@ -89,13 +89,12 @@
             describe('spyAllEvents()', function(){
                 it('should spy all model / collection events', function(){
                     this.view.spyAllEvents();
-                    expect(this.isSinonWrapped(this.view.spider.spyEvents.model['sync'])).to.be.true;
+                    expect(this.isSinonWrapped(this.view._spider.spyEvents.model['sync'])).to.be.true;
                     expect(this.isSinonWrapped(this.view.spyModel('sync'))).to.be.true;
-                    expect(this.isSinonWrapped(this.view.spider.spyEvents.model['change'])).to.be.true;
-                    expect(this.isSinonWrapped(this.view.spider.spyEvents.collection['reset'])).to.be.true;
+                    expect(this.isSinonWrapped(this.view.spyModel('change'))).to.be.true;
                     expect(this.isSinonWrapped(this.view.spyCollection('reset'))).to.be.true;
                     this.view.collection.reset([]);
-                    expect(this.view.spider.spyEvents.collection['reset'].calledOnce).to.be.true;
+                    expect(this.view._spider.spyEvents.collection['reset'].calledOnce).to.be.true;
                 });
                 describe('when view has no model and collection', function(){
                     beforeEach(function(){
@@ -103,17 +102,17 @@
                     });
                     it('should not create spyEvents', function(){
                         this.noResourceView.spyAllEvents();
-                        expect(this.noResourceView.spider.spyEvents.model).to.eql([]);
+                        expect(this.noResourceView._spider.spyEvents.model).to.eql([]);
                     });
                 });
             });
             describe('restoreAllEvents()', function(){
                 it('should restore all events', function(){
                     this.view.spyAllEvents();
-                    expect(this.isSinonWrapped(this.view.spider.spyEvents.model['sync'])).to.be.true;
+                    expect(this.isSinonWrapped(this.view._spider.spyEvents.model['sync'])).to.be.true;
 
                     this.view.restoreAllEvents();
-                    expect(this.view.spider.spyEvents.model['sync']).to.be.undefined;
+                    expect(this.view._spider.spyEvents.model['sync']).to.be.undefined;
                     console.log(this.view.model._events);
                 });
             });
