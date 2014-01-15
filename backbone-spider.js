@@ -67,5 +67,12 @@
                 return [];
             };
         },
+        // SPY getter
+        spyModel: function(eventName){
+            return this.spider.spyEvents.model[eventName];
+        },
+        spyCollection: function(eventName){
+            return this.spider.spyEvents.collection[eventName];
+        }
     });
 }).call(this, Backbone, sinon);

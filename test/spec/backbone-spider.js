@@ -90,8 +90,10 @@
                 it('should spy all model / collection events', function(){
                     this.view.spyAllEvents();
                     expect(this.isSinonWrapped(this.view.spider.spyEvents.model['sync'])).to.be.true;
+                    expect(this.isSinonWrapped(this.view.spyModel('sync'))).to.be.true;
                     expect(this.isSinonWrapped(this.view.spider.spyEvents.model['change'])).to.be.true;
                     expect(this.isSinonWrapped(this.view.spider.spyEvents.collection['reset'])).to.be.true;
+                    expect(this.isSinonWrapped(this.view.spyCollection('reset'))).to.be.true;
                     this.view.collection.reset([]);
                     expect(this.view.spider.spyEvents.collection['reset'].calledOnce).to.be.true;
                 });

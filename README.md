@@ -46,7 +46,7 @@ it('should spy all your original View', function(){
 });
 it('should spy all events', function(){
     this.view.model.save();
-    expect(this.view.spider.model["sync"].called).to.be.true;
+    expect(this.view.spyModel('sync').called).to.be.true;
 });
 ```
 
@@ -64,7 +64,6 @@ So, I make it experimentally.
 
 I want to add function for decreasing rebundant test double expression.
 
-- validate method for spider.model/collection
 - model/collection methods wrapping
 - for stubbing interface to methods wrapped by this plugin
 - observe listenTo(when add events, add eventsSpy)
