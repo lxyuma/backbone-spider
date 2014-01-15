@@ -5,7 +5,7 @@
 
 (function(Backbone) {
 
-    _.extend(Backbone.View.prototype, {
+     _.extend(Backbone.View.prototype, {
         // instance variables
         _spider: {
             spyFunctions: [],
@@ -73,6 +73,17 @@
         },
         spyCollection: function(eventName){
             return this._spider.spyEvents.collection[eventName];
-        }
+        },
     });
+    var includeEvent = {
+        // validate event
+        includeEvent: function(eventName, callback) {
+            var callbackWithContext = _.find(this._events[eventName], function(callbackWithContext) {
+                return callbackWithContext.callback === callback;
+            });
+            return callbackWithContext.callback === callback ? true : false;
+        }
+    };
+    _.extend(Backbone.Model.prototype, includeEvent);
+    _.extend(Backbone.Collection.prototype, includeEvent);
 }).call(this, Backbone, sinon);

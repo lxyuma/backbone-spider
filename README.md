@@ -60,6 +60,13 @@ If it is set to most upper level(describe), it may solve it.
 
 So, I make it experimentally.
 
+# doc
+
+now, writing.
+
+- view.model.includeEvent('sync', this.callback)
+
+
 # todo
 
 I want to add function for decreasing rebundant test double expression.

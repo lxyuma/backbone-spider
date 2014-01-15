@@ -126,5 +126,19 @@
 
             });
         });
+        describe('hasModelEvent() and hasCollectionEvent()', function(){
+            beforeEach(function(){
+                this.view.model = new MyModel();
+                this.callback = function(){ console.log('spider!'); };
+                this.view.listenTo(this.view.model, 'sync', this.callback);
+
+                this.view.collection = new MyCollection();
+                this.view.listenTo(this.view.collection, 'reset', this.callback);
+            });
+            it('should check if having event', function(){
+                expect(this.view.model.includeEvent('sync', this.callback)).to.be.true;
+                expect(this.view.collection.includeEvent('reset', this.callback)).to.be.true;
+            });
+        });
     });
 })();
