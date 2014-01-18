@@ -16,9 +16,9 @@ So, you can spy all functions and all events.
 // Your Backbone View
 var YourView = Backbone.View.extend({
     initialize: function(){
-        this.listenTo(this.model, 'sync', function(){ console.log('saved!!'); });
+        this.listenTo(this.model, 'request', function(){console.log('Saving');});
     },
-    originalFunc: function(){
+    originalMethod: function(){
         // any sentence ...
         this.commonMethod();
     },
@@ -28,25 +28,20 @@ var YourModel = Backbone.Model.extend({});
 
 // mocha + chai
 beforeEach(function(){
-    this.view = new YourView({
-        model: new YourModel({name: "test"})
-    });
+    this.view = new YourView({ model: new YourModel({name: "test"}) });
     this.view.spyAll();
-});
-afterEach(function(){
-  this.view.restoreAll();
 });
 it('should spy all Backbone.View', function(){
     this.view.render();
     expect(this.view.render.called).to.be.true;
 });
 it('should spy all your original View', function(){
-    this.view.originalFunc();
+    this.view.originalMethod();
     expect(this.view.commonMethod.calledOnce).to.be.true;
 });
 it('should spy all events', function(){
     this.view.model.save();
-    expect(this.view.spyModel('sync').called).to.be.true;
+    expect(this.view.spyModel('request').called).to.be.true;
 });
 ```
 
