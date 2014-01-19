@@ -74,6 +74,18 @@
         spyCollection: function(eventName){
             return this._spider.spyEvents.collection[eventName];
         },
+        // bind Marionette UI
+        spyUI: function(){
+            if(this.ui && typeof this.ui === "object"){
+                _.each(this.ui, function(jqObj, uiName) {
+                    if(typeof jqObj !== "string"){
+                        _.each(_.functions(jqObj), function(func) {
+                            sinon.spy(jqObj, func);
+                        });
+                    };
+                });
+            }
+        },
     });
     var includeEvent = {
         // validate event

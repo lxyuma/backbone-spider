@@ -140,5 +140,29 @@
                 expect(this.view.collection.includeEvent('reset', this.callback)).to.be.true;
             });
         });
+        describe('Marionette.ui bind',function(){
+            beforeEach(function(){
+                var MarioView = Backbone.Marionette.View.extend({
+                    ui: {
+                        test: "#test"
+                    },
+                    hideTest: function(){
+                        this.ui.test.hide();
+                    },
+                    render: function(){
+                        this.$el.html($('<div>', {id: "test"}));
+                        return this;
+                    }
+                });
+                this.m_view = new MarioView();
+                this.m_view.render();
+                this.m_view.bindUIElements();
+            });
+            it('should get spy ui',function(){
+                this.m_view.spyUI();
+                this.m_view.hideTest();
+                expect(this.m_view.ui.test.hide.calledOnce).to.be.true;
+            });
+        });
     });
 })();

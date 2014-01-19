@@ -67,9 +67,9 @@ now, writing.
 I want to add function for decreasing rebundant test double expression.
 
 - model/collection methods wrapping
-- for stubbing interface to methods wrapped by this plugin
 - observe listenTo(when add events, add eventsSpy)
 - observe all built in events(include not initialized)
 - server fake
+- for stubbing interface to methods wrapped by this plugin
 - restore eventspy(now, it's no completed)
-
+- marionette.ui spy/restore

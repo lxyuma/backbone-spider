@@ -18,5 +18,8 @@
     "underscore": "~1.5.2",
     "jquery": "~2.0.3",
     "sinon": "~1.7.3"
+  },
+  "dependencies": {
+    "marionette": "~1.5.1"
   }
 }
