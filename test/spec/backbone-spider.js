@@ -197,6 +197,7 @@
                     };
                 });
                 it('shoud be true if arg is already wrapped by sinon', function(){
+                    expect(Backbone.spider.isSinonWrapped(this.func.f)).to.be.false;
                     sinon.spy(this.func, "f");
                     expect(Backbone.spider.isSinonWrapped(this.func.f)).to.be.true;
                 });
