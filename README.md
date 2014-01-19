@@ -8,9 +8,8 @@ If you use this, you can write spy at once for using events/methods spy every ti
 
 In your favorite test framework(jasmine/mocha etc).
 
-In before sentence, add ```spyAll()```
-
-So, you can spy all functions and all events.
+- In ```before``` sentence, add ```spyAll()```
+- So, you can spy all functions and all events.
 
 ```javascript
 // Your Backbone View
@@ -41,7 +40,7 @@ it('should spy all your original View', function(){
 });
 it('should spy all events', function(){
     this.view.model.save();
-    expect(this.view.spyModel('request').called).to.be.true;
+    expect(this.view.modelSpy('request').called).to.be.true;
 });
 ```
 
@@ -73,3 +72,4 @@ I want to add function for decreasing rebundant test double expression.
 - for stubbing interface to methods wrapped by this plugin
 - restore eventspy(now, it's no completed)
 - marionette.ui spy/restore
+- adjust spy apply range for improving performance

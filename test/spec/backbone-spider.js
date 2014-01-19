@@ -15,66 +15,63 @@
         });
         beforeEach(function(){
             this.view = new MyView();
-            this.isSinonWrapped = this.view._isSinonWrapped;
         });
         describe('spyAll()', function(){
             beforeEach(function(){
-                sinon.spy(this.view, 'spyAllFunc');
+                sinon.spy(this.view, 'spyAllViewFunction');
                 sinon.spy(this.view, 'spyAllEvents');
             });
             it('should spy all function and events', function(){
                 this.view.spyAll();
-                expect(this.view.spyAllFunc.called).to.be.true;
+                expect(this.view.spyAllViewFunction.called).to.be.true;
                 expect(this.view.spyAllEvents.called).to.be.true;
             });
         });
         describe('restoreAll()', function() {
             beforeEach(function(){
-                sinon.spy(this.view, 'restoreAllFunc');
+                sinon.spy(this.view, 'restoreAllViewFunction');
                 sinon.spy(this.view, 'restoreAllEvents');
             });
             it('should spy all function and events', function(){
                 this.view.spyAll();
-                expect(this.isSinonWrapped(this.view.spyAllFunc)).to.be.true;
-                expect(this.isSinonWrapped(this.view.spyAllEvents)).to.be.true;
+                expect(Backbone.spider.isSinonWrapped(this.view.spyAllViewFunction)).to.be.true;
+                expect(Backbone.spider.isSinonWrapped(this.view.spyAllEvents)).to.be.true;
                 this.view.restoreAll();
-                expect(this.isSinonWrapped(this.view.spyAllFunc)).to.be.false;
-                expect(this.isSinonWrapped(this.view.spyAllEvents)).to.be.false;
+                expect(Backbone.spider.isSinonWrapped(this.view.spyAllViewFunction)).to.be.false;
+                expect(Backbone.spider.isSinonWrapped(this.view.spyAllEvents)).to.be.false;
             });
         });
-        describe('spyAllFunc()', function () {
-            describe('basic usage', function(){
-                beforeEach(function(){
-                    this.view.spyAllFunc();
-                });
-                afterEach(function(){
-                    this.view.restoreAllFunc();
-                });
-                it('should spy Backbone.View function', function () {
-                    this.view.render();
-                    expect(this.view.render.calledOnce).to.be.true;
-                });
-                it('should spy YourView function', function () {
-                    this.view.originalMethod();
-                    expect(this.view.originalMethod.calledOnce).to.be.true;
-                });
-                it('should not affect to sinon.stub (if you use restore)', function(){
-                    this.view.render.restore();
-                    sinon.stub(this.view, "render").returns('fakedTrue');
-                    expect(this.view.render()).to.eql('fakedTrue');
-                    this.view.render.restore();
-                });
-            });
-        });
-        describe('restoreAllFunc()', function(){
+        describe('spyAllViewFunction()', function () {
             beforeEach(function(){
-                this.view.spyAllFunc();
+                this.view.spyAllViewFunction();
+            });
+            afterEach(function(){
+                this.view.restoreAllViewFunction();
+            });
+            it('should spy Backbone.View function', function () {
+                this.view.render();
+                expect(this.view.render.calledOnce).to.be.true;
+            });
+            it('should spy YourView function', function () {
+                this.view.originalMethod();
+                expect(this.view.originalMethod.calledOnce).to.be.true;
+            });
+            it('should not affect to sinon.stub (if you use restore)', function(){
+                this.view.render.restore();
+                sinon.stub(this.view, "render").returns('fakedTrue');
+                expect(this.view.render()).to.eql('fakedTrue');
+                this.view.render.restore();
+            });
+        });
+        describe('restoreAllViewFunction()', function(){
+            beforeEach(function(){
+                this.view.spyAllViewFunction();
             });
             it('should restore sinon wrapper', function(){
                 this.view.render();
-                expect(this.isSinonWrapped(this.view.render)).to.be.true;
-                this.view.restoreAllFunc();
-                expect(this.isSinonWrapped(this.view.render)).to.be.false;
+                expect(Backbone.spider.isSinonWrapped(this.view.render)).to.be.true;
+                this.view.restoreAllViewFunction();
+                expect(Backbone.spider.isSinonWrapped(this.view.render)).to.be.false;
             });
         });
         describe('EVENT SPY', function(){
@@ -89,12 +86,12 @@
             describe('spyAllEvents()', function(){
                 it('should spy all model / collection events', function(){
                     this.view.spyAllEvents();
-                    expect(this.isSinonWrapped(this.view._spider.spyEvents.model['sync'])).to.be.true;
-                    expect(this.isSinonWrapped(this.view.spyModel('sync'))).to.be.true;
-                    expect(this.isSinonWrapped(this.view.spyModel('change'))).to.be.true;
-                    expect(this.isSinonWrapped(this.view.spyCollection('reset'))).to.be.true;
+                    expect(Backbone.spider.isSinonWrapped(this.view._spider.spyEvents.model['sync'])).to.be.true;
+                    expect(Backbone.spider.isSinonWrapped(this.view.modelSpy('sync'))).to.be.true;
+                    expect(Backbone.spider.isSinonWrapped(this.view.modelSpy('change'))).to.be.true;
+                    expect(Backbone.spider.isSinonWrapped(this.view.collectionSpy('reset'))).to.be.true;
                     this.view.collection.reset([]);
-                    expect(this.view.spyCollection('reset').calledOnce).to.be.true;
+                    expect(this.view.collectionSpy('reset').calledOnce).to.be.true;
                 });
                 describe('when view has no model and collection', function(){
                     beforeEach(function(){
@@ -109,7 +106,7 @@
             describe('restoreAllEvents()', function(){
                 it('should restore all events', function(){
                     this.view.spyAllEvents();
-                    expect(this.isSinonWrapped(this.view._spider.spyEvents.model['sync'])).to.be.true;
+                    expect(Backbone.spider.isSinonWrapped(this.view._spider.spyEvents.model['sync'])).to.be.true;
 
                     this.view.restoreAllEvents();
                     expect(this.view._spider.spyEvents.model['sync']).to.be.undefined;
@@ -120,8 +117,8 @@
                 it('should spy', function(){
                     var eventsSpy = this.view._createEventsSpy(this.view.model);
 
-                    expect(this.isSinonWrapped(eventsSpy['sync'])).to.be.true;
-                    expect(this.isSinonWrapped(eventsSpy['change'])).to.be.true;
+                    expect(Backbone.spider.isSinonWrapped(eventsSpy['sync'])).to.be.true;
+                    expect(Backbone.spider.isSinonWrapped(eventsSpy['change'])).to.be.true;
                 });
 
             });
@@ -162,6 +159,47 @@
                 this.m_view.spyUI();
                 this.m_view.hideTest();
                 expect(this.m_view.ui.test.hide.calledOnce).to.be.true;
+            });
+        });
+        describe('Backbone.spider', function(){
+            beforeEach(function(){
+                this.target = {
+                    func: function() {},
+                    func2: function() {},
+                    stringProp: "faked",
+                    alreadyWrapped: sinon.spy()
+                };
+            });
+            describe('spyAllFunction()', function(){
+                it('should get only func spy', function(){
+                    var spyArray = Backbone.spider.spyAllFunction(this.target);
+                    expect(spyArray.length).to.eql(2);
+                    expect(Backbone.spider.isSinonWrapped(spyArray[0])).to.be.true;
+                    expect(Backbone.spider.isSinonWrapped(spyArray[1])).to.be.true;
+
+                    this.target.func();
+                    expect(this.target.func.calledOnce).to.be.true;
+                });
+            });
+            describe('restoreAllFunction()', function(){
+                it('should restore spy', function(){
+                    var spyArray = Backbone.spider.spyAllFunction(this.target);
+                    this.target.func();
+                    expect(this.target.func.calledOnce).to.be.true;
+                    Backbone.spider.restoreAllFunction(spyArray);
+                    expect(this.target.func.calledOnce).to.be.undefined;
+                });
+            });
+            describe('isSinonWrapped()', function(){
+                beforeEach(function(){
+                    this.func = {
+                        f: function(){}
+                    };
+                });
+                it('shoud be true if arg is already wrapped by sinon', function(){
+                    sinon.spy(this.func, "f");
+                    expect(Backbone.spider.isSinonWrapped(this.func.f)).to.be.true;
+                });
             });
         });
     });

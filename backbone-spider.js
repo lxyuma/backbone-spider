@@ -5,10 +5,14 @@
 
 (function(Backbone) {
 
-     _.extend(Backbone.View.prototype, {
+    _.extend(Backbone.View.prototype, {
         // instance variables
         _spider: {
-            spyFunctions: [],
+            spyFunctions: {
+                model: [],
+                collection: [],
+                view: []
+            },
             spyEvents: {
                 model : [],
                 collection: []
@@ -16,32 +20,23 @@
         },
         // SPY ALL
         spyAll: function() {
-            this.spyAllFunc();
+            this.spyAllViewFunction();
+//            this.spyAllModelFunction();
             this.spyAllEvents();
         },
         restoreAll: function(){
-            this.restoreAllFunc();
+            this.restoreAllViewFunction();
             this.restoreAllEvents();
         },
         // SPY FUNCTION
-        spyAllFunc: function() {
-            return this._spider.spyFunctions = _.reduce(_.functions(this), function(spyArray, prop){
-                if (! this._isSinonWrapped(this[prop])){
-                    spyArray.push(sinon.spy(this, prop));
-                };
-                return spyArray;
-            }, [], this);
+        spyAllViewFunction: function() {
+            return this._spider.spyFunctions.view = Backbone.spider.spyAllFunction(this);
         },
-        restoreAllFunc: function() {
-            return _.map(this._spider.spyFunctions, function(prop){
-                if (this._isSinonWrapped(prop)){
-                    prop.restore();
-                };
-            }, this);
-        },
-        _isSinonWrapped: function(func){
-            // this is the same checking in sinon.js
-            return ((func.restore && func.restore.sinon) || func.calledBefore) ? true : false;
+//        spyAllModelFunction: function() {
+//            return this._spider.spyFunctions.model = Backbone.spider.spyAllFunction(this.model);
+//        },
+        restoreAllViewFunction: function() {
+            return Backbone.spider.restoreAllFunction(this._spider.spyFunctions.view);
         },
         // SPY EVENTS
         spyAllEvents: function(){
@@ -68,10 +63,10 @@
             };
         },
         // SPY getter
-        spyModel: function(eventName){
+        modelSpy: function(eventName){
             return this._spider.spyEvents.model[eventName];
         },
-        spyCollection: function(eventName){
+        collectionSpy: function(eventName){
             return this._spider.spyEvents.collection[eventName];
         },
         // bind Marionette UI
@@ -98,4 +93,26 @@
     };
     _.extend(Backbone.Model.prototype, includeEvent);
     _.extend(Backbone.Collection.prototype, includeEvent);
+
+    Backbone.spider = {
+        spyAllFunction: function(target){
+            return _.reduce(_.functions(target), function(spyArray, prop){
+                if (! Backbone.spider.isSinonWrapped(target[prop])){
+                    spyArray.push(sinon.spy(target, prop));
+                };
+                return spyArray;
+            }, []);
+        },
+        isSinonWrapped: function(func){
+            // this is the same checking in sinon.js
+            return ((func.restore && func.restore.sinon) || func.calledBefore) ? true : false;
+        },
+        restoreAllFunction: function(target){
+            return _.map(target, function(prop){
+                if (Backbone.spider.isSinonWrapped(prop)){
+                    prop.restore();
+                };
+            });
+        },
+    };
 }).call(this, Backbone, sinon);
